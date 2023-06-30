@@ -10,85 +10,59 @@ public class BaseCharacterMovement : MonoBehaviour
 
     [SerializeField] protected GroundCheck groundCheckCollider = null;
 
+    [SerializeField] protected Transform headTransform = null;
+
     [SerializeField] protected float movementSpeed = 1f;
     [SerializeField] protected float jumpSpeed = 10f;
     [SerializeField] protected float sprintMultiplier = 1.5f;
     [SerializeField] protected float groundSpeedMultiplier = 1f;
-    [SerializeField] protected float airSpeedMultiplier = .2f;
+    [SerializeField] protected float airSpeedMultiplier = .1f;
 
     //the current velocity of the character
     protected Vector3 velocity;
 
+    protected float headXRotation = 0f;
+
     protected bool grounded = false;
 
     /// <summary>
-    /// Takes the movement input vector and converts it to a vector3 to match the character orientation
+    /// Moves the character on the horizontal axis
     /// </summary>
-    /// <param name="movementInput"></param>
-    /// <param name="isSprinting"></param>
-    /// <returns>Vector of converted 3D movement</returns>
-    protected Vector3 ApplyMovementInput(Vector2 movementInput, bool isSprinting)
+    /// <param name="direction">The local direction of desired movement</param>
+    public void Move(Vector3 direction)
     {
-        Vector3 finalVector = Vector3.zero;
+        direction = direction.normalized;
 
-        finalVector += transform.forward * movementInput.y * movementSpeed;
-        finalVector += transform.right * movementInput.x * movementSpeed;
-
-        //apply sprint multiplier
-        if(isSprinting)
+        if(grounded)
         {
-            finalVector *= sprintMultiplier;
-        }
-
-        return finalVector;
-    }
-
-    /// <summary>
-    /// Gets the jump vector as the world up
-    /// </summary>
-    /// <returns>Up vector with jump speed applied</returns>
-    protected Vector3 ApplyJumpVector()
-    {
-        Vector3 finalVector = Vector3.zero;
-
-        finalVector += Vector3.up * jumpSpeed;
-
-        return finalVector;
-    }
-
-    /// <summary>
-    /// Checks if the character is touching the ground
-    /// </summary>
-    /// <returns>Grounded status</returns>
-    protected bool CheckGrounded()
-    {
-        grounded = groundCheckCollider.CheckGroundedStatus();
-        return grounded;
-    }
-
-    /// <summary>
-    /// Will apply all of the player movement input to the character's physics
-    /// </summary>
-    /// <param name="motionInput">X and Z is the attempted horizontal movement. Y is the attempted jumping height</param>
-    protected void ApplyMotion(Vector3 motionInput)
-    {
-        CheckGrounded();
-
-        velocity.y += gravity * Time.deltaTime;
-
-        if (grounded)
-        {
-            velocity.y = -.2f;
-            velocity = motionInput * groundSpeedMultiplier;
+            //sets horizontal movement speed
+            velocity = transform.TransformVector(direction) * groundSpeedMultiplier * movementSpeed + new Vector3(0, velocity.y, 0);
         }
         else
         {
-            motionInput.y = 0f;
-            velocity += motionInput * airSpeedMultiplier;
+            //adds horizontal movement speed
+            velocity += transform.TransformVector(direction) * airSpeedMultiplier * movementSpeed;
         }
+    }
 
-        characterController.Move(velocity * Time.deltaTime);
+    /// <summary>
+    /// Makes the character jump if grounded
+    /// </summary>
+    public void Jump() 
+    {
+        if(grounded && velocity.y <= 0) 
+        {
+            velocity += transform.up * jumpSpeed;
+        }
+    }
 
-        velocity = characterController.velocity;
+    public void Look(float horizontalRoation, float verticalRotation)
+    {
+        headXRotation -= verticalRotation;
+        headXRotation = Mathf.Clamp(headXRotation, -90f, 90f);
+
+        headTransform.localRotation = Quaternion.Euler(headXRotation, 0, 0);
+
+        transform.Rotate(Vector3.up, horizontalRoation);
     }
 }

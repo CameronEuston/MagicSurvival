@@ -53,6 +53,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Looking"",
+                    ""type"": ""Value"",
+                    ""id"": ""1dacca0d-ea8d-4af5-abef-75b017ef17c1"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -209,6 +218,61 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""e44297db-dd73-468f-a8fe-a8d0ecf6cd06"",
+                    ""path"": ""2DVector(mode=1)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Looking"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""621480f6-c112-4d4f-bec5-139925ad6655"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Looking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""4d962d5b-e2be-4200-a08d-cea036e2f906"",
+                    ""path"": ""<Gamepad>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Looking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""eeb8d978-6223-4f9e-8bd8-32b3edc2dedf"",
+                    ""path"": ""<Gamepad>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Looking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""60c625dd-f9fb-47bb-b1be-7b682c5ac3c1"",
+                    ""path"": ""<Gamepad>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Looking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -220,6 +284,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerCharacter_Movement = m_PlayerCharacter.FindAction("Movement", throwIfNotFound: true);
         m_PlayerCharacter_Jump = m_PlayerCharacter.FindAction("Jump", throwIfNotFound: true);
         m_PlayerCharacter_Sprint = m_PlayerCharacter.FindAction("Sprint", throwIfNotFound: true);
+        m_PlayerCharacter_Looking = m_PlayerCharacter.FindAction("Looking", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -282,6 +347,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerCharacter_Movement;
     private readonly InputAction m_PlayerCharacter_Jump;
     private readonly InputAction m_PlayerCharacter_Sprint;
+    private readonly InputAction m_PlayerCharacter_Looking;
     public struct PlayerCharacterActions
     {
         private @PlayerControls m_Wrapper;
@@ -289,6 +355,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_PlayerCharacter_Movement;
         public InputAction @Jump => m_Wrapper.m_PlayerCharacter_Jump;
         public InputAction @Sprint => m_Wrapper.m_PlayerCharacter_Sprint;
+        public InputAction @Looking => m_Wrapper.m_PlayerCharacter_Looking;
         public InputActionMap Get() { return m_Wrapper.m_PlayerCharacter; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -307,6 +374,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Sprint.started -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnSprint;
+                @Looking.started -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnLooking;
+                @Looking.performed -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnLooking;
+                @Looking.canceled -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnLooking;
             }
             m_Wrapper.m_PlayerCharacterActionsCallbackInterface = instance;
             if (instance != null)
@@ -320,6 +390,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
+                @Looking.started += instance.OnLooking;
+                @Looking.performed += instance.OnLooking;
+                @Looking.canceled += instance.OnLooking;
             }
         }
     }
@@ -329,5 +402,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnLooking(InputAction.CallbackContext context);
     }
 }
