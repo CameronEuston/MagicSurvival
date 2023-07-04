@@ -56,6 +56,11 @@ public class BaseCharacterMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Applies body turning and head nodding
+    /// </summary>
+    /// <param name="horizontalRoation">The angle in degrees that you want the character to turn horizontally</param>
+    /// <param name="verticalRotation">The angle in degrees that you want the camera to turn vertically</param>
     public void Look(float horizontalRoation, float verticalRotation)
     {
         headXRotation -= verticalRotation;

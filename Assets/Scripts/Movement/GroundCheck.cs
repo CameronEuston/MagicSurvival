@@ -15,11 +15,11 @@ public class GroundCheck : MonoBehaviour
     {
         if(Physics.CheckSphere(transform.position, sphereScale / 2, groundMask, QueryTriggerInteraction.Ignore))
         {
-            Debug.Log("Grounded");
+            //Debug.Log("Grounded");
             return true;
         }
 
-        Debug.Log("Not Grounded");
+        //Debug.Log("Not Grounded");
         return false;
     }
 }
