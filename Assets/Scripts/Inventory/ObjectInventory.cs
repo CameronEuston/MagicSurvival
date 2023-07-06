@@ -6,7 +6,7 @@ using static UnityEditor.Progress;
 
 public class ObjectInventory : MonoBehaviour, IInventory
 {
-    public List<Item> inventory => throw new System.NotImplementedException();
+    public List<Item> inventory => inventory;
     
     public void AddItem(ItemSingle item)
     {
