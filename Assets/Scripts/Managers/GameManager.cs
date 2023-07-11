@@ -27,26 +27,45 @@ public class GameManager : MonoBehaviour
         ResumeTime();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>The player GameObject</returns>
     public GameObject GetPlayer()
     {
         return player;
     }
 
+    /// <summary>
+    /// Sets a new player GameObject
+    /// </summary>
+    /// <param name="newPlayerObject"></param>
     public void SetPlayer(GameObject newPlayerObject)
     {
         player = newPlayerObject;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>Player inventory UI</returns>
     public GameObject GetPlayerInventoryUI()
     {
         return playerInventoryUI;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>Container inventory UI</returns>
     public GameObject GetContainerInventoryUI()
     {
         return containerInventoryUI;
     }
 
+    /// <summary>
+    /// Sets time scale to zero and enables cursor
+    /// </summary>
     public void PauseTime()
     {
         Time.timeScale = 0;
@@ -55,6 +74,9 @@ public class GameManager : MonoBehaviour
         Cursor.visible = true;
     }
 
+    /// <summary>
+    /// Sets time scale to 1 and disables cursor
+    /// </summary>
     public void ResumeTime()
     {
         Time.timeScale = 1;

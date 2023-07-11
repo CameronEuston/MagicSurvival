@@ -10,6 +10,18 @@ public class PlayerCharacterMovement : BaseCharacterMovement
 
     protected void Update()
     {
+        Vector3 ccVelocity = new Vector3(characterController.velocity.x, 0, characterController.velocity.z);
+
+        if(characterController.velocity.y > velocity.y)
+        {
+            ccVelocity.y = velocity.y;
+        }
+        else
+        {
+            ccVelocity.y = characterController.velocity.y;
+        }
+
+        velocity = ccVelocity;
 
         Vector2 mouseDelta = Mouse.current.delta.ReadValue() * sensitivity;
 
@@ -29,7 +41,7 @@ public class PlayerCharacterMovement : BaseCharacterMovement
             velocity += Vector3.up * gravity * Time.deltaTime;
 
         //set downward velocity to small number to prevent stacking speed
-        else if(grounded && velocity.y < 0)
+        else if(grounded)
         {
             characterController.Move(new Vector3(0, -groundStickDistance, 0));
             velocity = new Vector3(velocity.x, -.3f, velocity.z);

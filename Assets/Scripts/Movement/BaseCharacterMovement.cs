@@ -24,6 +24,7 @@ public class BaseCharacterMovement : MonoBehaviour
     protected float headXRotation = 0f;
 
     protected bool grounded = false;
+    protected bool jumpReady = true;
 
     protected bool movementEnabled = true;
 
@@ -36,16 +37,19 @@ public class BaseCharacterMovement : MonoBehaviour
         if(!movementEnabled) return;
 
         direction = direction.normalized;
+        Vector3 worldSpaceDirection = transform.TransformVector(direction);
 
-        if(grounded && velocity.y < 0)
+        if(grounded)
         {
             //sets horizontal movement speed
-            velocity = transform.TransformVector(direction) * groundSpeedMultiplier * movementSpeed + new Vector3(0, velocity.y, 0);
+            velocity = worldSpaceDirection * groundSpeedMultiplier * movementSpeed + new Vector3(0, velocity.y, 0);
         }
         else
         {
             //adds horizontal movement speed
-            velocity += transform.TransformVector(direction) * airSpeedMultiplier * movementSpeed;
+
+            //old calculation
+            velocity += worldSpaceDirection * airSpeedMultiplier * movementSpeed;
         }
     }
 
@@ -59,6 +63,8 @@ public class BaseCharacterMovement : MonoBehaviour
         if (grounded && velocity.y <= 0) 
         {
             velocity += transform.up * jumpSpeed;
+            StartCoroutine(groundCheckCollider.DelayChecks(.1f));
+            grounded = false;
         }
     }
 
