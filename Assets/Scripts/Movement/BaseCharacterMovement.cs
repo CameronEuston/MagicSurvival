@@ -25,15 +25,19 @@ public class BaseCharacterMovement : MonoBehaviour
 
     protected bool grounded = false;
 
+    protected bool movementEnabled = true;
+
     /// <summary>
     /// Moves the character on the horizontal axis
     /// </summary>
     /// <param name="direction">The local direction of desired movement</param>
     public void Move(Vector3 direction)
     {
+        if(!movementEnabled) return;
+
         direction = direction.normalized;
 
-        if(grounded)
+        if(grounded && velocity.y < 0)
         {
             //sets horizontal movement speed
             velocity = transform.TransformVector(direction) * groundSpeedMultiplier * movementSpeed + new Vector3(0, velocity.y, 0);
@@ -50,7 +54,9 @@ public class BaseCharacterMovement : MonoBehaviour
     /// </summary>
     public void Jump() 
     {
-        if(grounded && velocity.y <= 0) 
+        if (!movementEnabled) return;
+
+        if (grounded && velocity.y <= 0) 
         {
             velocity += transform.up * jumpSpeed;
         }
@@ -63,11 +69,22 @@ public class BaseCharacterMovement : MonoBehaviour
     /// <param name="verticalRotation">The angle in degrees that you want the camera to turn vertically</param>
     public void Look(float horizontalRoation, float verticalRotation)
     {
+        if (!movementEnabled) return;
+
         headXRotation -= verticalRotation;
         headXRotation = Mathf.Clamp(headXRotation, -90f, 90f);
 
         headTransform.localRotation = Quaternion.Euler(headXRotation, 0, 0);
 
         transform.Rotate(Vector3.up, horizontalRoation);
+    }
+
+    /// <summary>
+    /// Enables or disables all character movement
+    /// </summary>
+    /// <param name="enabledStatus"></param>
+    public void SetEnabledStatus(bool enabledStatus)
+    {
+        movementEnabled = enabledStatus;
     }
 }

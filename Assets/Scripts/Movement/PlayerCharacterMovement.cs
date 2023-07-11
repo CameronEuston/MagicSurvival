@@ -6,9 +6,11 @@ using UnityEngine.InputSystem;
 public class PlayerCharacterMovement : BaseCharacterMovement
 {
     [SerializeField] protected float sensitivity = .5f;
+    [SerializeField] protected float groundStickDistance = 1.0f;
 
     protected void Update()
     {
+
         Vector2 mouseDelta = Mouse.current.delta.ReadValue() * sensitivity;
 
         Look(mouseDelta.x, mouseDelta.y);
@@ -27,8 +29,11 @@ public class PlayerCharacterMovement : BaseCharacterMovement
             velocity += Vector3.up * gravity * Time.deltaTime;
 
         //set downward velocity to small number to prevent stacking speed
-        else if(grounded && velocity.y < -.2f)
+        else if(grounded && velocity.y < 0)
+        {
+            characterController.Move(new Vector3(0, -groundStickDistance, 0));
             velocity = new Vector3(velocity.x, -.3f, velocity.z);
+        }
 
         characterController.Move(velocity * Time.deltaTime);
     }

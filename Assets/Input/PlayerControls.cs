@@ -62,6 +62,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""29bfb899-e578-43d0-b3f9-9a0885a94124"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""82a781b5-c547-4163-a123-d73cc0249606"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -220,7 +238,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""Controller"",
                     ""id"": ""e44297db-dd73-468f-a8fe-a8d0ecf6cd06"",
                     ""path"": ""2DVector(mode=1)"",
                     ""interactions"": """",
@@ -273,6 +291,50 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Looking"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""18468aed-d0c0-4880-9fe9-452765a81393"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f65712ab-c068-4e0a-b1ba-0f8823e855e2"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d3ef125-a542-454e-ae72-415fe60eacbf"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d88a402-8b92-4801-9f7f-4a08a7a6bdfe"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -285,6 +347,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_PlayerCharacter_Jump = m_PlayerCharacter.FindAction("Jump", throwIfNotFound: true);
         m_PlayerCharacter_Sprint = m_PlayerCharacter.FindAction("Sprint", throwIfNotFound: true);
         m_PlayerCharacter_Looking = m_PlayerCharacter.FindAction("Looking", throwIfNotFound: true);
+        m_PlayerCharacter_Interact = m_PlayerCharacter.FindAction("Interact", throwIfNotFound: true);
+        m_PlayerCharacter_Inventory = m_PlayerCharacter.FindAction("Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -348,6 +412,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerCharacter_Jump;
     private readonly InputAction m_PlayerCharacter_Sprint;
     private readonly InputAction m_PlayerCharacter_Looking;
+    private readonly InputAction m_PlayerCharacter_Interact;
+    private readonly InputAction m_PlayerCharacter_Inventory;
     public struct PlayerCharacterActions
     {
         private @PlayerControls m_Wrapper;
@@ -356,6 +422,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerCharacter_Jump;
         public InputAction @Sprint => m_Wrapper.m_PlayerCharacter_Sprint;
         public InputAction @Looking => m_Wrapper.m_PlayerCharacter_Looking;
+        public InputAction @Interact => m_Wrapper.m_PlayerCharacter_Interact;
+        public InputAction @Inventory => m_Wrapper.m_PlayerCharacter_Inventory;
         public InputActionMap Get() { return m_Wrapper.m_PlayerCharacter; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -377,6 +445,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Looking.started -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnLooking;
                 @Looking.performed -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnLooking;
                 @Looking.canceled -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnLooking;
+                @Interact.started -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnInteract;
+                @Inventory.started -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnInventory;
+                @Inventory.performed -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnInventory;
+                @Inventory.canceled -= m_Wrapper.m_PlayerCharacterActionsCallbackInterface.OnInventory;
             }
             m_Wrapper.m_PlayerCharacterActionsCallbackInterface = instance;
             if (instance != null)
@@ -393,6 +467,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Looking.started += instance.OnLooking;
                 @Looking.performed += instance.OnLooking;
                 @Looking.canceled += instance.OnLooking;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
             }
         }
     }
@@ -403,5 +483,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnLooking(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
     }
 }

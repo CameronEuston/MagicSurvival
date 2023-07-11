@@ -97,9 +97,10 @@ GameObject:
   - component: {fileID: 8502767384841582449}
   - component: {fileID: 2269240684191874867}
   - component: {fileID: 2173784274346186866}
+  - component: {fileID: 1303369415341117864}
   m_Layer: 0
   m_Name: PlayerPrefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -211,6 +212,18 @@ MonoBehaviour:
   groundSpeedMultiplier: 1
   airSpeedMultiplier: 0.001
   sensitivity: 0.5
+--- !u!114 &1303369415341117864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433511662625565207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82f5975a108f8d447b7adca9f7dde7b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1859229382092842911
 GameObject:
   m_ObjectHideFlags: 0
